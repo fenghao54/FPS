@@ -11,7 +11,7 @@ public class AddShells : MonoBehaviour
         {
             var player = FindObjectOfType<PlayerState>();
             var curshells = player.shells.Get();
-            var shells_add = 5;
+            var shells_add = 10;
             player.shells.Set(curshells + shells_add);
 
         }
