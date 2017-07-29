@@ -4,6 +4,10 @@ public class ActorState : MonoBehaviour
 {
     public Value<float> health = new Value<float>(100f);
 
+    public Value<float> shells = new Value<float>(20f);
+
+    public Value<float> zhunXin = new Value<float>(0.1f);
+
     public Value<bool> isGrounded = new Value<bool>(true);
 
     public Value<Vector3> velocity = new Value<Vector3>(Vector3.zero);

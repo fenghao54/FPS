@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 
+
 [RequireComponent(typeof(CharacterController))]
 public class PlayerCharacter : PlayerBehaviour
 {
@@ -45,17 +46,60 @@ public class PlayerCharacter : PlayerBehaviour
 
     public WeaponBehaviour equippedWeapon;
 
+    public Transform grabObject;
+    public Transform grabStack;
+
+    public GameObject camera_a;
     private void Start()
     {
+        camera_a = GameObject.Find("FPCamera");
         cc = GetComponent<CharacterController>();
         Player.jump.AddStartHandle(StartJumpHandle);
 
+        Player.grabBox.AddStartHandle(StartGrabBox);
 
         Player.attackOnce.SetHandle(() => OnAttack(false));
 
         Player.attackContinuously.SetHandle(() => OnAttack(true));
 
         EquipWeapon(equippedWeapon);
+
+    }
+    bool StartGrabBox()
+    {
+        
+        if (grabObject != null)
+        {
+            Debug.Log("2");
+            grabObject.transform.SetParent(null);
+            grabObject.GetComponent<Rigidbody>().isKinematic = false;
+            grabObject = null;
+            return false;
+        }
+        else
+        {
+            Debug.Log("1");
+            RaycastHit hit;
+           // Debug.DrawRay(camera_a.transform.position, camera_a.transform.forward, Color.green,10);
+            Physics.Raycast(camera_a.transform.position, camera_a.transform.forward, out hit, 10);
+            if (hit.collider.CompareTag("Box"))
+            {
+               
+                grabObject = hit.transform;
+                grabObject.transform.SetParent(grabStack);
+                grabObject.localPosition = Vector3.zero;
+                grabObject.localRotation = Quaternion.identity;
+                grabObject.transform.GetComponent<Rigidbody>().isKinematic = true;
+
+                var player = FindObjectOfType<PlayerState>();
+                var curshells = player.shells.Get();
+                var shells_add = 5;
+                player.shells.Set(curshells + shells_add);
+               
+            }
+
+            return true;
+        }
 
     }
 
@@ -109,6 +153,11 @@ public class PlayerCharacter : PlayerBehaviour
 
 
         previouslyGrounded = cc.isGrounded;
+
+        if (Player.grabBox.Active)
+        {
+            Player.grabBox.DirectStop();
+        }
     }
 
     private void UpdateMovement()
@@ -182,8 +231,7 @@ public class PlayerCharacter : PlayerBehaviour
 
         return attackWasSuccessful;
     }
-
-
+    
     void EquipWeapon(WeaponBehaviour Weapon)
     {
         if (Weapon)

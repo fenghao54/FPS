@@ -15,8 +15,12 @@ public class PlayerState : ActorState
 
     public Activity aim = new Activity();
 
+    public Activity grabBox = new Activity();
+
     public Attempt attackOnce = new Attempt();
 
     public Attempt attackContinuously = new Attempt();
+
+    
 
 }

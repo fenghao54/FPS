@@ -59,6 +59,9 @@ public class HitscanWeapon : WeaponBehaviour
     [SerializeField]
     private float shotDuration = 0.22f;
 
+    
+    public  float zidan = 20f;//子弹数
+
     public override bool AttackOnceHandle(Camera camera)
     {
         if (Time.time < nextTimeCanFire || !IsEquiped)
@@ -89,9 +92,16 @@ public class HitscanWeapon : WeaponBehaviour
 
         for (int i = 0; i < rayCount; i++)
             DoHitscan(camera);
-
+        Debug.Log(zidan);
         Attack.Send();
+        
 
+        var player= FindObjectOfType<PlayerState>();
+        var curShells = player.shells.Get();
+        player.shells.Set(curShells - 1);
+
+        var zhunXin = player.zhunXin.Get();
+        player.zhunXin.Set(0.3f);
     }
 
     protected void DoHitscan(Camera camera)

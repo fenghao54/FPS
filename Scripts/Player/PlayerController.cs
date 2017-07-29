@@ -4,7 +4,7 @@ using UnityEngine;
 public class PlayerController : PlayerBehaviour
 {
     private InputManager inputManager;
-
+  
     private void Awake()
     {
         if (!GameplayStatics.InputManager)
@@ -38,6 +38,10 @@ public class PlayerController : PlayerBehaviour
 
             if (inputManager.GetButtonDown("Attack"))
                 Player.attackOnce.Do();
+            if (inputManager.GetButtonDown("Grab"))
+            {
+                Player.grabBox.Start();
+            }
         }
         else
         {

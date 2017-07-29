@@ -2,17 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class damageBox : MonoBehaviour
+public class AddShells : MonoBehaviour
 {
-   
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("Player"))
         {
             var player = FindObjectOfType<PlayerState>();
-            var curHealth = player.health.Get();
-            var damage = 20;
-            player.health.Set(curHealth - damage);
+            var curshells = player.shells.Get();
+            var shells_add = 5;
+            player.shells.Set(curshells + shells_add);
+
         }
     }
 }
